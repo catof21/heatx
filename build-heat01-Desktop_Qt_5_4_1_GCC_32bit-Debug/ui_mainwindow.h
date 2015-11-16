@@ -27,7 +27,7 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
-    QCustomPlot *widget;
+    QCustomPlot *plot;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -39,9 +39,9 @@ public:
         MainWindow->resize(630, 419);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        widget = new QCustomPlot(centralWidget);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(259, 69, 241, 131));
+        plot = new QCustomPlot(centralWidget);
+        plot->setObjectName(QStringLiteral("plot"));
+        plot->setGeometry(QRect(380, 40, 241, 131));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));

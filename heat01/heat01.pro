@@ -14,9 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    qcustomplot/qcustomplot.cpp
+    qcustomplot/qcustomplot.cpp \
+    flow.cpp
 
 HEADERS  += mainwindow.h \
-    qcustomplot/qcustomplot.h
+    qcustomplot/qcustomplot.h \
+    flow.h
 
 FORMS    += mainwindow.ui

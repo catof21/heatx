@@ -14,11 +14,11 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QCustomPlot" name="widget" native="true">
+   <widget class="QCustomPlot" name="plot" native="true">
     <property name="geometry">
      <rect>
-      <x>259</x>
-      <y>69</y>
+      <x>380</x>
+      <y>40</y>
       <width>241</width>
       <height>131</height>
      </rect>
