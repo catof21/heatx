@@ -15,10 +15,10 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     qcustomplot/qcustomplot.cpp \
-    flow.cpp
+    Flow.cpp
 
 HEADERS  += mainwindow.h \
     qcustomplot/qcustomplot.h \
-    flow.h
+    Flow.h
 
 FORMS    += mainwindow.ui

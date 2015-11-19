@@ -51,16 +51,16 @@ OBJECTS_DIR   = ./
 SOURCES       = ../heat01/main.cpp \
 		../heat01/mainwindow.cpp \
 		../heat01/qcustomplot/qcustomplot.cpp \
-		../heat01/flow.cpp moc_mainwindow.cpp \
+		../heat01/Flow.cpp moc_mainwindow.cpp \
 		moc_qcustomplot.cpp \
-		moc_flow.cpp
+		moc_Flow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		qcustomplot.o \
-		flow.o \
+		Flow.o \
 		moc_mainwindow.o \
 		moc_qcustomplot.o \
-		moc_flow.o
+		moc_Flow.o
 DIST          = ../../../Apps/Qt/5.4/gcc/mkspecs/features/spec_pre.prf \
 		../../../Apps/Qt/5.4/gcc/mkspecs/common/shell-unix.conf \
 		../../../Apps/Qt/5.4/gcc/mkspecs/common/unix.conf \
@@ -182,10 +182,10 @@ DIST          = ../../../Apps/Qt/5.4/gcc/mkspecs/features/spec_pre.prf \
 		../../../Apps/Qt/5.4/gcc/mkspecs/features/lex.prf \
 		../heat01/heat01.pro ../heat01/mainwindow.h \
 		../heat01/qcustomplot/qcustomplot.h \
-		../heat01/flow.h ../heat01/main.cpp \
+		../heat01/Flow.h ../heat01/main.cpp \
 		../heat01/mainwindow.cpp \
 		../heat01/qcustomplot/qcustomplot.cpp \
-		../heat01/flow.cpp
+		../heat01/Flow.cpp
 QMAKE_TARGET  = heat01
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = heat01
@@ -479,8 +479,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../heat01/mainwindow.h ../heat01/qcustomplot/qcustomplot.h ../heat01/flow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../heat01/main.cpp ../heat01/mainwindow.cpp ../heat01/qcustomplot/qcustomplot.cpp ../heat01/flow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../heat01/mainwindow.h ../heat01/qcustomplot/qcustomplot.h ../heat01/Flow.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../heat01/main.cpp ../heat01/mainwindow.cpp ../heat01/qcustomplot/qcustomplot.cpp ../heat01/Flow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../heat01/mainwindow.ui $(DISTDIR)/
 
 
@@ -504,9 +504,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_qcustomplot.cpp moc_flow.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_qcustomplot.cpp moc_Flow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_qcustomplot.cpp moc_flow.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_qcustomplot.cpp moc_Flow.cpp
 moc_mainwindow.cpp: ../../../Apps/Qt/5.4/gcc/include/QtWidgets/QMainWindow \
 		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qmainwindow.h \
 		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qwidget.h \
@@ -1096,7 +1096,7 @@ moc_qcustomplot.cpp: ../../../Apps/Qt/5.4/gcc/include/QtCore/QObject \
 		../heat01/qcustomplot/qcustomplot.h
 	/home/cat/Apps/Qt/5.4/gcc/bin/moc $(DEFINES) -I/home/cat/Apps/Qt/5.4/gcc/mkspecs/linux-g++ -I/home/cat/Coder/heatx/heat01 -I/home/cat/Apps/Qt/5.4/gcc/include -I/home/cat/Apps/Qt/5.4/gcc/include/QtPrintSupport -I/home/cat/Apps/Qt/5.4/gcc/include/QtWidgets -I/home/cat/Apps/Qt/5.4/gcc/include/QtGui -I/home/cat/Apps/Qt/5.4/gcc/include/QtCore -I. ../heat01/qcustomplot/qcustomplot.h -o moc_qcustomplot.cpp
 
-moc_flow.cpp: ../../../Apps/Qt/5.4/gcc/include/QtCore/QObject \
+moc_Flow.cpp: ../../../Apps/Qt/5.4/gcc/include/QtCore/QObject \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/qobject.h \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/qobjectdefs.h \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/qnamespace.h \
@@ -1146,8 +1146,9 @@ moc_flow.cpp: ../../../Apps/Qt/5.4/gcc/include/QtCore/QObject \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/qcontainerfwd.h \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/qisenum.h \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/qobject_impl.h \
-		../heat01/flow.h
-	/home/cat/Apps/Qt/5.4/gcc/bin/moc $(DEFINES) -I/home/cat/Apps/Qt/5.4/gcc/mkspecs/linux-g++ -I/home/cat/Coder/heatx/heat01 -I/home/cat/Apps/Qt/5.4/gcc/include -I/home/cat/Apps/Qt/5.4/gcc/include/QtPrintSupport -I/home/cat/Apps/Qt/5.4/gcc/include/QtWidgets -I/home/cat/Apps/Qt/5.4/gcc/include/QtGui -I/home/cat/Apps/Qt/5.4/gcc/include/QtCore -I. ../heat01/flow.h -o moc_flow.cpp
+		../../../Apps/Qt/5.4/gcc/include/QtCore/QString \
+		../heat01/Flow.h
+	/home/cat/Apps/Qt/5.4/gcc/bin/moc $(DEFINES) -I/home/cat/Apps/Qt/5.4/gcc/mkspecs/linux-g++ -I/home/cat/Coder/heatx/heat01 -I/home/cat/Apps/Qt/5.4/gcc/include -I/home/cat/Apps/Qt/5.4/gcc/include/QtPrintSupport -I/home/cat/Apps/Qt/5.4/gcc/include/QtWidgets -I/home/cat/Apps/Qt/5.4/gcc/include/QtGui -I/home/cat/Apps/Qt/5.4/gcc/include/QtCore -I. ../heat01/Flow.h -o moc_Flow.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -2733,7 +2734,7 @@ qcustomplot.o: ../heat01/qcustomplot/qcustomplot.cpp ../heat01/qcustomplot/qcust
 		../../../Apps/Qt/5.4/gcc/include/QtPrintSupport/qtprintsupportversion.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qcustomplot.o ../heat01/qcustomplot/qcustomplot.cpp
 
-flow.o: ../heat01/flow.cpp ../heat01/flow.h \
+Flow.o: ../heat01/Flow.cpp ../heat01/Flow.h \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/QObject \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/qobject.h \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/qobjectdefs.h \
@@ -2783,8 +2784,27 @@ flow.o: ../heat01/flow.cpp ../heat01/flow.h \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/qvarlengtharray.h \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/qcontainerfwd.h \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/qisenum.h \
-		../../../Apps/Qt/5.4/gcc/include/QtCore/qobject_impl.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o flow.o ../heat01/flow.cpp
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qobject_impl.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/QString \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/QtDebug \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qdebug.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qhash.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qpair.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qmap.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qtextstream.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qiodevice.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qlocale.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qvariant.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qstringlist.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qdatastream.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qregexp.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qstringmatcher.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qshareddata.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qvector.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qpoint.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qset.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qcontiguouscache.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Flow.o ../heat01/Flow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
@@ -2792,8 +2812,8 @@ moc_mainwindow.o: moc_mainwindow.cpp
 moc_qcustomplot.o: moc_qcustomplot.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_qcustomplot.o moc_qcustomplot.cpp
 
-moc_flow.o: moc_flow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_flow.o moc_flow.cpp
+moc_Flow.o: moc_Flow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_Flow.o moc_Flow.cpp
 
 ####### Install
 
