@@ -14,9 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    flow.cpp
+    flow.cpp \
+    dialog.cpp
 
 HEADERS  += mainwindow.h \
-    flow.h
+    flow.h \
+    dialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    dialog.ui
