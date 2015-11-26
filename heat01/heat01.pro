@@ -16,14 +16,12 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     qcustomplot/qcustomplot.cpp \
     Flow.cpp \
-    inputflow.cpp \
-    flowgrid.cpp
+    inputflow.cpp
 
 HEADERS  += mainwindow.h \
     qcustomplot/qcustomplot.h \
     Flow.h \
-    inputflow.h \
-    flowgrid.h
+    inputflow.h
 
 FORMS    += mainwindow.ui \
     inputflow.ui

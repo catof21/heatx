@@ -15,11 +15,12 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
-#include <qcustomplot/qcustomplot.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -27,8 +28,9 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
-    QCustomPlot *plot;
+    QPushButton *add_flow;
     QMenuBar *menuBar;
+    QMenu *menuHeat_Xchanger;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -39,13 +41,15 @@ public:
         MainWindow->resize(630, 419);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        plot = new QCustomPlot(centralWidget);
-        plot->setObjectName(QStringLiteral("plot"));
-        plot->setGeometry(QRect(380, 40, 241, 131));
+        add_flow = new QPushButton(centralWidget);
+        add_flow->setObjectName(QStringLiteral("add_flow"));
+        add_flow->setGeometry(QRect(10, 10, 91, 51));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 630, 20));
+        menuHeat_Xchanger = new QMenu(menuBar);
+        menuHeat_Xchanger->setObjectName(QStringLiteral("menuHeat_Xchanger"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -53,6 +57,8 @@ public:
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
+
+        menuBar->addAction(menuHeat_Xchanger->menuAction());
 
         retranslateUi(MainWindow);
 
@@ -62,6 +68,8 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        add_flow->setText(QApplication::translate("MainWindow", "Add flows", 0));
+        menuHeat_Xchanger->setTitle(QApplication::translate("MainWindow", "Heat_Xchanger", 0));
     } // retranslateUi
 
 };

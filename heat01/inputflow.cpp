@@ -3,6 +3,7 @@
 #include <Flow.h>
 #include <QDebug>
 
+using namespace::std;
 
 InputFlow::InputFlow(QWidget *parent) :
     QDialog(parent),
@@ -15,6 +16,11 @@ InputFlow::~InputFlow()
 {
     delete ui;
 }
+void InputFlow::SetFlows(std::vector<Flow> *flowvector){
+    Flows=flowvector;
+    QDebug() << "Flowvector set";
+}
+
 void InputFlow::on_pushButton_clicked()
 {
     Flow *flow = new Flow;
