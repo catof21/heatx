@@ -36,6 +36,11 @@ double Flow::getInCap()
     return InCap;
 }
 
+void Flow::setFlowName(QString str)
+{
+    FlowName  = str;
+}
+
 void Flow::setInFromTemp(double n)
 {
     InFromTemp = n;
@@ -51,11 +56,7 @@ void Flow::setInCap(double n)
     InCap = n;
 }
 
-void Flow::setIsHeat(double infrom, double into)
+void Flow::setIsHeat(bool t)
 {
-    if (infrom>=into){
-        IsHeat = true;
-    } else {
-        IsHeat = false;
-    }
+    IsHeat = t;
 }

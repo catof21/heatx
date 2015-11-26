@@ -14,14 +14,17 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QCustomPlot" name="plot" native="true">
+   <widget class="QPushButton" name="add_flow">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>40</y>
-      <width>241</width>
-      <height>131</height>
+      <x>10</x>
+      <y>10</y>
+      <width>91</width>
+      <height>51</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>Add flows</string>
     </property>
    </widget>
   </widget>
@@ -34,6 +37,12 @@
      <height>20</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuHeat_Xchanger">
+    <property name="title">
+     <string>Heat_Xchanger</string>
+    </property>
+   </widget>
+   <addaction name="menuHeat_Xchanger"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -46,14 +55,6 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>QCustomPlot</class>
-   <extends>QWidget</extends>
-   <header location="global">qcustomplot/qcustomplot.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

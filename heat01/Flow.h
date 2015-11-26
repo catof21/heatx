@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QDebug>
 
 
 
@@ -24,11 +25,11 @@ public:
     double getInCap();
     QString getFlowName();
 
-
+    void setFlowName(QString str);
     void setInFromTemp(double n);
     void setInToTemp(double n);
     void setInCap(double n);
-    void setIsHeat(double infrom, double into);
+    void setIsHeat(bool t);
 public slots:
 };
 

@@ -15,10 +15,17 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     qcustomplot/qcustomplot.cpp \
-    Flow.cpp
+    Flow.cpp \
+    inputflow.cpp \
+    flowgrid.cpp
 
 HEADERS  += mainwindow.h \
     qcustomplot/qcustomplot.h \
-    Flow.h
+    Flow.h \
+    inputflow.h \
+    flowgrid.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    inputflow.ui
+
+DISTFILES +=
