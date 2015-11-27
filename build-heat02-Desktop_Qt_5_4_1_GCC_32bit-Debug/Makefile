@@ -50,11 +50,15 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../heat02/main.cpp \
 		../heat02/mainwindow.cpp \
-		../heat02/flow.cpp moc_mainwindow.cpp
+		../heat02/flow.cpp \
+		../heat02/dialog.cpp moc_mainwindow.cpp \
+		moc_dialog.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		flow.o \
-		moc_mainwindow.o
+		dialog.o \
+		moc_mainwindow.o \
+		moc_dialog.o
 DIST          = ../../../Apps/Qt/5.4/gcc/mkspecs/features/spec_pre.prf \
 		../../../Apps/Qt/5.4/gcc/mkspecs/common/shell-unix.conf \
 		../../../Apps/Qt/5.4/gcc/mkspecs/common/unix.conf \
@@ -175,9 +179,11 @@ DIST          = ../../../Apps/Qt/5.4/gcc/mkspecs/features/spec_pre.prf \
 		../../../Apps/Qt/5.4/gcc/mkspecs/features/yacc.prf \
 		../../../Apps/Qt/5.4/gcc/mkspecs/features/lex.prf \
 		../heat02/heat02.pro ../heat02/mainwindow.h \
-		../heat02/flow.h ../heat02/main.cpp \
+		../heat02/flow.h \
+		../heat02/dialog.h ../heat02/main.cpp \
 		../heat02/mainwindow.cpp \
-		../heat02/flow.cpp
+		../heat02/flow.cpp \
+		../heat02/dialog.cpp
 QMAKE_TARGET  = heat02
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = heat02
@@ -205,7 +211,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): ui_mainwindow.h $(OBJECTS)  
+$(TARGET): ui_mainwindow.h ui_dialog.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../heat02/heat02.pro ../../../Apps/Qt/5.4/gcc/mkspecs/linux-g++/qmake.conf ../../../Apps/Qt/5.4/gcc/mkspecs/features/spec_pre.prf \
@@ -469,9 +475,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../heat02/mainwindow.h ../heat02/flow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../heat02/main.cpp ../heat02/mainwindow.cpp ../heat02/flow.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../heat02/mainwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../heat02/mainwindow.h ../heat02/flow.h ../heat02/dialog.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../heat02/main.cpp ../heat02/mainwindow.cpp ../heat02/flow.cpp ../heat02/dialog.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../heat02/mainwindow.ui ../heat02/dialog.ui $(DISTDIR)/
 
 
 clean:compiler_clean 
@@ -494,9 +500,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_dialog.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_dialog.cpp
 moc_mainwindow.cpp: ../../../Apps/Qt/5.4/gcc/include/QtWidgets/QMainWindow \
 		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qmainwindow.h \
 		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qwidget.h \
@@ -609,13 +615,122 @@ moc_mainwindow.cpp: ../../../Apps/Qt/5.4/gcc/include/QtWidgets/QMainWindow \
 		../heat02/mainwindow.h
 	/home/cat/Apps/Qt/5.4/gcc/bin/moc $(DEFINES) -I/home/cat/Apps/Qt/5.4/gcc/mkspecs/linux-g++ -I/home/cat/Coder/heatx/heat02 -I/home/cat/Apps/Qt/5.4/gcc/include -I/home/cat/Apps/Qt/5.4/gcc/include/QtWidgets -I/home/cat/Apps/Qt/5.4/gcc/include/QtGui -I/home/cat/Apps/Qt/5.4/gcc/include/QtCore -I. ../heat02/mainwindow.h -o moc_mainwindow.cpp
 
+moc_dialog.cpp: ../../../Apps/Qt/5.4/gcc/include/QtWidgets/QDialog \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qdialog.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qwidget.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qwindowdefs.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qglobal.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qconfig.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qfeatures.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qsystemdetection.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qprocessordetection.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qcompilerdetection.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qtypeinfo.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qtypetraits.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qsysinfo.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qlogging.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qflags.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qbasicatomic.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_bootstrap.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qgenericatomic.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_msvc.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_armv7.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_armv6.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_armv5.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_ia64.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_mips.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_x86.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_cxx11.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_gcc.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_unix.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qglobalstatic.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qmutex.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qnumeric.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qobjectdefs.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qnamespace.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qobjectdefs_impl.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qwindowdefs_win.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qobject.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qstring.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qchar.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qbytearray.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qrefcount.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qarraydata.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qstringbuilder.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qlist.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qalgorithms.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qiterator.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qbytearraylist.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qcoreevent.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qscopedpointer.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qmetatype.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qvarlengtharray.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qcontainerfwd.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qisenum.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qobject_impl.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qmargins.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpaintdevice.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qrect.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qsize.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qpoint.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpalette.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qcolor.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qrgb.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qstringlist.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qdatastream.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qiodevice.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qpair.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qregexp.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qstringmatcher.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qbrush.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qvector.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qmatrix.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpolygon.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qregion.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qline.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qtransform.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpainterpath.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qimage.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpixelformat.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpixmap.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qsharedpointer.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qshareddata.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qhash.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qsharedpointer_impl.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qfont.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qfontmetrics.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qfontinfo.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qsizepolicy.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qcursor.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qkeysequence.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qevent.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qvariant.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qmap.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qdebug.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qtextstream.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qlocale.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qset.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qcontiguouscache.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qurl.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qurlquery.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qfile.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qfiledevice.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qvector2d.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qtouchdevice.h \
+		../heat02/dialog.h
+	/home/cat/Apps/Qt/5.4/gcc/bin/moc $(DEFINES) -I/home/cat/Apps/Qt/5.4/gcc/mkspecs/linux-g++ -I/home/cat/Coder/heatx/heat02 -I/home/cat/Apps/Qt/5.4/gcc/include -I/home/cat/Apps/Qt/5.4/gcc/include/QtWidgets -I/home/cat/Apps/Qt/5.4/gcc/include/QtGui -I/home/cat/Apps/Qt/5.4/gcc/include/QtCore -I. ../heat02/dialog.h -o moc_dialog.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h
+compiler_uic_make_all: ui_mainwindow.h ui_dialog.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h
+	-$(DEL_FILE) ui_mainwindow.h ui_dialog.h
 ui_mainwindow.h: ../heat02/mainwindow.ui
 	/home/cat/Apps/Qt/5.4/gcc/bin/uic ../heat02/mainwindow.ui -o ui_mainwindow.h
+
+ui_dialog.h: ../heat02/dialog.ui
+	/home/cat/Apps/Qt/5.4/gcc/bin/uic ../heat02/dialog.ui -o ui_dialog.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -856,7 +971,45 @@ mainwindow.o: ../heat02/mainwindow.cpp ../heat02/mainwindow.h \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/QObject \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/QDebug \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/QString \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/QVariant \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/QAction \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qaction.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qactiongroup.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/QApplication \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qapplication.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qcoreapplication.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qeventloop.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qdesktopwidget.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qguiapplication.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qinputmethod.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/QButtonGroup \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qbuttongroup.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/QHeaderView \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qheaderview.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qabstractitemview.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qabstractscrollarea.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qframe.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qabstractitemmodel.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qitemselectionmodel.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qabstractitemdelegate.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qstyleoption.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qabstractspinbox.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qvalidator.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qregularexpression.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qslider.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qabstractslider.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qstyle.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qtabbar.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qrubberband.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/QMenuBar \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qmenubar.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qmenu.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/QStatusBar \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qstatusbar.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/QToolBar \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qtoolbar.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../heat02/mainwindow.cpp
 
 flow.o: ../heat02/flow.cpp ../heat02/flow.h \
@@ -931,8 +1084,122 @@ flow.o: ../heat02/flow.cpp ../heat02/flow.h \
 		../../../Apps/Qt/5.4/gcc/include/QtCore/QString
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o flow.o ../heat02/flow.cpp
 
+dialog.o: ../heat02/dialog.cpp ../heat02/dialog.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/QDialog \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qdialog.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qwidget.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qwindowdefs.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qglobal.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qconfig.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qfeatures.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qsystemdetection.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qprocessordetection.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qcompilerdetection.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qtypeinfo.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qtypetraits.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qsysinfo.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qlogging.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qflags.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qbasicatomic.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_bootstrap.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qgenericatomic.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_msvc.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_armv7.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_armv6.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_armv5.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_ia64.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_mips.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_x86.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_cxx11.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_gcc.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qatomic_unix.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qglobalstatic.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qmutex.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qnumeric.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qobjectdefs.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qnamespace.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qobjectdefs_impl.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qwindowdefs_win.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qobject.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qstring.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qchar.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qbytearray.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qrefcount.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qarraydata.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qstringbuilder.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qlist.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qalgorithms.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qiterator.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qbytearraylist.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qcoreevent.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qscopedpointer.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qmetatype.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qvarlengtharray.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qcontainerfwd.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qisenum.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qobject_impl.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qmargins.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpaintdevice.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qrect.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qsize.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qpoint.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpalette.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qcolor.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qrgb.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qstringlist.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qdatastream.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qiodevice.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qpair.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qregexp.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qstringmatcher.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qbrush.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qvector.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qmatrix.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpolygon.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qregion.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qline.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qtransform.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpainterpath.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qimage.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpixelformat.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qpixmap.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qsharedpointer.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qshareddata.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qhash.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qsharedpointer_impl.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qfont.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qfontmetrics.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qfontinfo.h \
+		../../../Apps/Qt/5.4/gcc/include/QtWidgets/qsizepolicy.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qcursor.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qkeysequence.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qevent.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qvariant.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qmap.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qdebug.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qtextstream.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qlocale.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qset.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qcontiguouscache.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qurl.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qurlquery.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qfile.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/qfiledevice.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qvector2d.h \
+		../../../Apps/Qt/5.4/gcc/include/QtGui/qtouchdevice.h \
+		ui_dialog.h \
+		../heat02/flow.h \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/QObject \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/QDebug \
+		../../../Apps/Qt/5.4/gcc/include/QtCore/QString
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dialog.o ../heat02/dialog.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_dialog.o: moc_dialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_dialog.o moc_dialog.cpp
 
 ####### Install
 

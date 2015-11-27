@@ -1,4 +1,5 @@
 #include "flow.h"
+#include "mainwindow.h"
 
 
 
@@ -8,7 +9,7 @@ Flow::Flow()
     //this->ID=Cnt_Flows;
 }
 
-int Flow::getID() const
+int Flow::getID()
 {
     return ID;
 }
@@ -43,9 +44,14 @@ int Flow::getAST()
     return AST;
 }
 
-int Flow::getSTT()
+int Flow::getATT()
 {
     return ATT;
+}
+
+void Flow::setID(int value)
+{
+    ID=value;
 }
 
 void Flow::setFlowName(QString value)
@@ -76,9 +82,9 @@ void Flow::setIsHeat(bool value)
 void Flow::setAST(int deltaT)
 {
     if(this->IsHeat){
-        AST = STemp-deltaT/2;
+        AST = this->STemp-deltaT/2;
     } else {
-        AST = STemp+deltaT/2;
+        AST = this->STemp+deltaT/2;
     }
 
 }
@@ -86,9 +92,9 @@ void Flow::setAST(int deltaT)
 void Flow::setATT(int deltaT)
 {
     if(this->IsHeat){
-        ATT = TTemp-deltaT/2;
+        ATT = this->TTemp-deltaT/2;
     } else {
-        ATT = TTemp+deltaT/2;
+        ATT = this->TTemp+deltaT/2;
     }
 }
 

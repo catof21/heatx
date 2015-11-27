@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QString>
+#include <mainwindow.h>
 
 class Flow
 {
@@ -11,15 +12,16 @@ public:
     Flow();
 
     ~Flow();
-    int getID() const;
+    int getID();
     QString getFlowName();
     int getSTemp();
     int getTTemp();
     int getHCap();
     bool getIsHeat();
     int getAST();
-    int getSTT();
+    int getATT();
 
+    void setID(int value);
     void setFlowName(QString value);
     void setSTemp(int value);
     void setTTemp(int value);
