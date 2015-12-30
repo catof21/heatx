@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QString>
-#include <mainwindow.h>
+//#include <mainwindow.h>
 
 class Flow
 {
@@ -12,33 +12,33 @@ public:
     Flow();
 
     ~Flow();
-    int getID();
+//    double getID();
     QString getFlowName();
-    int getSTemp();
-    int getTTemp();
-    int getHCap();
+    double getSTemp();
+    double getTTemp();
+    double getHCap();
     bool getIsHeat();
-    int getAST();
-    int getATT();
+    double getAST();
+    double getATT();
 
-    void setID(int value);
+//    void setID(int value);
     void setFlowName(QString value);
-    void setSTemp(int value);
-    void setTTemp(int value);
-    void setHCap(int value);
+    void setSTemp(double value);
+    void setTTemp(double value);
+    void setHCap(double value);
     void setIsHeat(bool value);
-    void setAST(int deltaT);
-    void setATT(int deltaT);
+    void setAST(double deltaT);
+    void setATT(double deltaT);
 
 private:
-    int ID;
+ //   int ID;
     QString FlowName;  //name or Id
-    int  STemp;        //input heat from in Celsius
-    int  TTemp;        //input heat to in Celsius
-    int  HCap;         //input heat capacity Flowrate in KW/Celsius
+    double  STemp;        //input heat from in Celsius
+    double  TTemp;        //input heat to in Celsius
+    double  HCap;         //input heat capacity Flowrate in KW/Celsius
     bool IsHeat;       //heat_Flow = true, cold_Flow = false
-    int  AST;          //adjusted supply temp
-    int  ATT;          //adjusted target temp
+    double  AST;          //adjusted supply temp
+    double  ATT;          //adjusted target temp
 
 };
 

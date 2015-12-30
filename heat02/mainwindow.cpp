@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->STemp->setText("180");
+/*    ui->STemp->setText("180");
     ui->TTemp->setText("80");
     ui->HCap->setText("20");
     ui->STemp_2->setText("130");
@@ -27,6 +27,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->TTemp_4->setText("120");
     ui->HCap_4->setText("36");
     ui->deltaT->setText("10");
+*/
+
+    //flow = new Flow;
+    //std::vector<Flow> flows;
+
 
     intervalbal = new QGraphicsScene(this);
     ui->graphicsView->setScene(intervalbal);
@@ -36,17 +41,19 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+
+    delete intervalbal;
 }
 
 void MainWindow::on_btn_ok_clicked()
 {
-    Flow *flow = new Flow;
-    std::vector<Flow> flows;
+    //Flow *flow = new Flow;
+    //std::vector<Flow> flows;
+
 //    flows.resize(4);
-    int deltaT;
-    deltaT=ui->deltaT->text().toInt();
 
 
+/*
 //    for (int j=0;j<4;j++) {
 //        flow->setID(1);
         flow->setSTemp(ui->STemp->text().toInt());
@@ -125,7 +132,7 @@ void MainWindow::on_btn_ok_clicked()
     //rectangle = intervalbal->addRect(-900,heatinterval[0],-20,20,20,outline,redbrush);
     rectangle = intervalbal->addRect(-900,heatinterval[0],-20,20,outline,redbrush);
 
-    /*line = scene->addLine(-890,0-hot1.adjustedsupplytemperature,-890,0-hot1.adjustedtargettemperature,redpen);
+    line = scene->addLine(-890,0-hot1.adjustedsupplytemperature,-890,0-hot1.adjustedtargettemperature,redpen);
     rectangle = scene->addRect(-850,0-hot2.adjustedsupplytemperature-20,20,20,outline,redbrush);
     line = scene->addLine(-840,0-hot2.adjustedsupplytemperature,-840,0-hot2.adjustedtargettemperature,redpen);
     rectangle = scene->addRect(-800,0-cold3.adjustedsupplytemperature,20,20,outline,bluebrush);
@@ -145,5 +152,55 @@ void MainWindow::on_btn_ok_clicked()
     text->setX(-748);
     text->setY(0-cold4.adjustedsupplytemperature);
     */
+
+}
+
+void MainWindow::on_addFlow_clicked()
+{
+
+
+    if (!ui->deltaT->text().isEmpty()) {
+
+        ui->inputTable->insertRow(ui->inputTable->rowCount());
+        ui->inputTable->horizontalHeader()->setStretchLastSection(true); //elvileg strech-el
+        QTableWidgetItem *st01 = new QTableWidgetItem(QString(ui->inST->text()));
+        qDebug() << ui->inST->text();
+        qDebug() << ui->inputTable->rowCount();
+        ui->inputTable->setItem(ui->inputTable->rowCount()-1,1,st01);
+        QTableWidgetItem *st02 = new QTableWidgetItem(QString(ui->inTT->text()));
+        ui->inputTable->setItem(ui->inputTable->rowCount()-1,2,st02);
+        QTableWidgetItem *st03 = new QTableWidgetItem(QString(ui->inHC->text()));
+        ui->inputTable->setItem(ui->inputTable->rowCount()-1,3,st03);
+
+        newflow.setSTemp(ui->inST->text().toDouble());
+        newflow.setTTemp(ui->inTT->text().toDouble());
+        newflow.setHCap(ui->inHC->text().toDouble());
+        if (newflow.getSTemp()>newflow.getTTemp()){
+            newflow.setIsHeat(true);
+            newflow.setFlowName(QString("H%1").arg(ui->inputTable->rowCount()));
+        } else {
+            newflow.setIsHeat(false);
+            newflow.setFlowName(QString("C%1").arg(ui->inputTable->rowCount()));
+        }
+
+        newflow.setAST(ui->deltaT->text().toDouble());
+        newflow.setATT(ui->deltaT->text().toDouble());
+        QTableWidgetItem *st00 = new QTableWidgetItem(QString(newflow.getFlowName()));
+        ui->inputTable->setItem(ui->inputTable->rowCount()-1,0,st00);
+        QTableWidgetItem *st04 = new QTableWidgetItem(QString::number(newflow.getAST()));
+        ui->inputTable->setItem(ui->inputTable->rowCount()-1,4,st04);
+        QTableWidgetItem *st05 = new QTableWidgetItem(QString::number(newflow.getATT()));
+        ui->inputTable->setItem(ui->inputTable->rowCount()-1,5,st05);
+        flows.push_back(newflow);
+        //flows.push_back(flow);
+        //flows->push_back(flow);
+
+        ui->inST->clear();
+        ui->inTT->clear();
+        ui->inHC->clear();
+    } else {
+        QMessageBox::warning(this,tr("INFO"),tr("The deltaT must be set!"));
+        ui->deltaT->setFocus();
+    }
 
 }

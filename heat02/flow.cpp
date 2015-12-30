@@ -1,5 +1,5 @@
 #include "flow.h"
-#include "mainwindow.h"
+//#include "mainwindow.h"
 
 
 
@@ -9,27 +9,23 @@ Flow::Flow()
     //this->ID=Cnt_Flows;
 }
 
-int Flow::getID()
-{
-    return ID;
-}
 
 QString Flow::getFlowName()
 {
     return FlowName;
 }
 
-int Flow::getSTemp()
+double Flow::getSTemp()
 {
     return STemp;
 }
 
-int Flow::getTTemp()
+double Flow::getTTemp()
 {
     return TTemp;
 }
 
-int Flow::getHCap()
+double Flow::getHCap()
 {
     return HCap;
 }
@@ -39,37 +35,33 @@ bool Flow::getIsHeat()
     return IsHeat;
 }
 
-int Flow::getAST()
+double Flow::getAST()
 {
     return AST;
 }
 
-int Flow::getATT()
+double Flow::getATT()
 {
     return ATT;
 }
 
-void Flow::setID(int value)
-{
-    ID=value;
-}
 
 void Flow::setFlowName(QString value)
 {
     FlowName=value;
 }
 
-void Flow::setSTemp(int value)
+void Flow::setSTemp(double value)
 {
     STemp = value;
 }
 
-void Flow::setTTemp(int value)
+void Flow::setTTemp(double value)
 {
     TTemp=value;
 }
 
-void Flow::setHCap(int value)
+void Flow::setHCap(double value)
 {
     HCap=value;
 }
@@ -79,7 +71,7 @@ void Flow::setIsHeat(bool value)
     IsHeat=value;
 }
 
-void Flow::setAST(int deltaT)
+void Flow::setAST(double deltaT)
 {
     if(this->IsHeat){
         AST = this->STemp-deltaT/2;
@@ -89,7 +81,7 @@ void Flow::setAST(int deltaT)
 
 }
 
-void Flow::setATT(int deltaT)
+void Flow::setATT(double deltaT)
 {
     if(this->IsHeat){
         ATT = this->TTemp-deltaT/2;

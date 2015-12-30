@@ -8,6 +8,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsItem>
+#include <QMessageBox>
 
 namespace Ui {
 class MainWindow;
@@ -19,10 +20,15 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    std::vector<Flow> flows;
+    Flow newflow;
+
     ~MainWindow();
 
 private slots:
     void on_btn_ok_clicked();
+
+    void on_addFlow_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -34,6 +40,7 @@ private:
     QGraphicsScene *heatflow1;
     QGraphicsScene *graph;
     QGraphicsScene *design;
+
 };
 
 #endif // MAINWINDOW_H
