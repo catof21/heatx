@@ -21,7 +21,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QTableView>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -39,7 +38,6 @@ public:
     QPushButton *btn_ok;
     QGraphicsView *graphicsView;
     QTableWidget *inputTable;
-    QTableView *tableView;
     QLabel *label;
     QLabel *label_3;
     QLabel *label_5;
@@ -82,12 +80,13 @@ public:
         btn_ok->setGeometry(QRect(10, 230, 80, 21));
         graphicsView = new QGraphicsView(centralWidget);
         graphicsView->setObjectName(QStringLiteral("graphicsView"));
-        graphicsView->setGeometry(QRect(470, 270, 411, 251));
+        graphicsView->setGeometry(QRect(10, 270, 611, 251));
+        QFont font;
+        font.setPointSize(9);
+        graphicsView->setFont(font);
         inputTable = new QTableWidget(centralWidget);
         if (inputTable->columnCount() < 6)
             inputTable->setColumnCount(6);
-        QFont font;
-        font.setPointSize(9);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         __qtablewidgetitem->setFont(font);
         inputTable->setHorizontalHeaderItem(0, __qtablewidgetitem);
@@ -108,9 +107,7 @@ public:
         inputTable->setHorizontalHeaderItem(5, __qtablewidgetitem5);
         inputTable->setObjectName(QStringLiteral("inputTable"));
         inputTable->setGeometry(QRect(10, 60, 611, 161));
-        tableView = new QTableView(centralWidget);
-        tableView->setObjectName(QStringLiteral("tableView"));
-        tableView->setGeometry(QRect(320, 340, 256, 192));
+        inputTable->setFont(font);
         label = new QLabel(centralWidget);
         label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(230, 0, 86, 21));
@@ -158,7 +155,6 @@ public:
         inTT->raise();
         inHC->raise();
         addFlow->raise();
-        tableView->raise();
         label->raise();
         label_3->raise();
         label_5->raise();
@@ -180,7 +176,6 @@ public:
         QWidget::setTabOrder(addFlow, btn_ok);
         QWidget::setTabOrder(btn_ok, inputTable);
         QWidget::setTabOrder(inputTable, graphicsView);
-        QWidget::setTabOrder(graphicsView, tableView);
 
         retranslateUi(MainWindow);
 

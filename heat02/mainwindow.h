@@ -2,8 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtCore>
+#include <QtGui>
 #include <flow.h>
 #include <vector>
+#include <list>
 #include <QString>
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -20,7 +23,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    std::vector<Flow> flows;
+    std::list<Flow> flows;
     Flow newflow;
 
     ~MainWindow();

@@ -90,9 +90,7 @@ void MainWindow::on_btn_ok_clicked()
         }
     }
     reverse(heatinterval.begin(),heatinterval.end());
-    for (int i=0;i<heatinterval.size();i++) {
-        qDebug("last heatinterval %f",heatinterval[i]);
-    }
+    
 
     intervalbal->clear();
     ui->graphicsView->setScene(intervalbal);
@@ -113,6 +111,11 @@ void MainWindow::on_btn_ok_clicked()
     redpen.setWidth(2);
     bluepen.setWidth(2);
 
+    for (int i=0;i<heatinterval.size();i++) {
+     //   qDebug("last heatinterval %f",heatinterval[i]);
+        
+    }
+    
     //rectangle = intervalbal->addRect(-900,heatinterval[0],-20,20,20,outline,redbrush);
     rectangle = intervalbal->addRect(0,heatinterval[0],10,10,outline,redbrush);
     rectangle = intervalbal->addRect(0,heatinterval[1],10,10,outline,redbrush);
@@ -122,6 +125,8 @@ void MainWindow::on_btn_ok_clicked()
     rectangle = intervalbal->addRect(0,heatinterval[5],10,10,outline,redbrush);
     rectangle = intervalbal->addRect(0,heatinterval[6],10,10,outline,redbrush);
     rectangle = intervalbal->addRect(0,heatinterval[7],10,10,outline,redbrush);
+    
+    text = intervalbal->addText()
     //line = intervalbal->addLine(0,-30,0,30,redpen);
 
     //qDebug() << heatinterval[0];
