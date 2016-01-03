@@ -55,13 +55,16 @@
       <x>10</x>
       <y>270</y>
       <width>611</width>
-      <height>251</height>
+      <height>301</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <pointsize>9</pointsize>
      </font>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QTableWidget" name="inputTable">

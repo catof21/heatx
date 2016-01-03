@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     newflow.setTTemp(80);
     newflow.setHCap(20);
     newflow.setFlowName("H1");
+    newflow.setIsHeat(true);
     newflow.setAST(ui->deltaT->text().toDouble());
     newflow.setATT(ui->deltaT->text().toDouble());
     flows.push_back(newflow);
@@ -29,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     newflow.setTTemp(40);
     newflow.setHCap(40);
     newflow.setFlowName("H2");
+    newflow.setIsHeat(true);
     newflow.setAST(ui->deltaT->text().toDouble());
     newflow.setATT(ui->deltaT->text().toDouble());
     flows.push_back(newflow);
@@ -37,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     newflow.setTTemp(100);
     newflow.setHCap(80);
     newflow.setFlowName("C1");
+    newflow.setIsHeat(false);
     newflow.setAST(ui->deltaT->text().toDouble());
     newflow.setATT(ui->deltaT->text().toDouble());
     flows.push_back(newflow);
@@ -45,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     newflow.setTTemp(120);
     newflow.setHCap(36);
     newflow.setFlowName("C2");
+    newflow.setIsHeat(false);
     newflow.setAST(ui->deltaT->text().toDouble());
     newflow.setATT(ui->deltaT->text().toDouble());
     flows.push_back(newflow);
@@ -72,7 +76,7 @@ void MainWindow::on_btn_ok_clicked()
         //heat steps
         vector<double> heatsteps;
         vector<double> heatinterval;
-    for (std::list<Flow>::iterator j=flows.begin();j!=flows.end();j++){
+    for (std::vector<Flow>::iterator j=flows.begin();j!=flows.end();j++){
 //        ui->plainTextEdit->setPlainText(QString::number(j->getAST()));
             heatsteps.push_back(j->getAST());
 //            qDebug("AST %d ->%d",j->getAST(),i);
@@ -82,7 +86,7 @@ void MainWindow::on_btn_ok_clicked()
         }
     sort(heatsteps.begin(),heatsteps.end());
     int min=-1;
-    for(int i=0;i<heatsteps.size();i++) {
+    for(unsigned long i=0;i<heatsteps.size();i++) {
         if (heatsteps[i]!=min){
             heatinterval.push_back(heatsteps[i]);
 //            qDebug("bekerül: %d min %d", heatsteps[i], min);
@@ -90,12 +94,11 @@ void MainWindow::on_btn_ok_clicked()
         }
     }
     reverse(heatinterval.begin(),heatinterval.end());
-    for (int i=0;i<heatinterval.size();i++) {
-        qDebug("last heatinterval %f",heatinterval[i]);
-    }
+
 
     intervalbal->clear();
     ui->graphicsView->setScene(intervalbal);
+
 
 
     QBrush redbrush (Qt::red);
@@ -109,12 +112,82 @@ void MainWindow::on_btn_ok_clicked()
     QPen bluepen (Qt::blue);
     QPen blackpen (Qt::black);
     outline.setWidth(2);
-    outline2.setWidth(0.5);
+    outline2.setWidth(1);
     redpen.setWidth(2);
     bluepen.setWidth(2);
 
-    //rectangle = intervalbal->addRect(-900,heatinterval[0],-20,20,20,outline,redbrush);
-    rectangle = intervalbal->addRect(0,heatinterval[0],10,10,outline,redbrush);
+    //int rows=300/heatinterval.size();
+    int rows=35;
+    qDebug() << rows;
+    for (unsigned long i=0;i<heatinterval.size();i++) {
+       //qDebug() << 300- rows << "300-row";
+       qDebug() <<  rows <<"row"<<heatinterval[i];
+        line = intervalbal->addLine(30,rows+12,5+(flows.size()*35),rows+12,blackpen);
+        text = intervalbal->addText(QString::number(heatinterval[i]));
+        text->setX(0);
+        text->setY(rows);
+
+        //text = intervalbal->addText(QString::number(300-rows));
+        //text->setPos(305,300-rows);
+
+       rows=rows+35;
+        //rectangle = intervalbal->addRect(-300,150-)
+    }
+    //rectangle = intervalbal->addRect(305,287,10,10,outline,redbrush);
+    //rectangle = intervalbal->addRect(305,42,10,10,outline,bluebrush);
+    //steam populations
+    int pindex=1;
+    for (vector<Flow>::iterator j=flows.begin();j<flows.end();j++) {
+        double start = j->getAST();
+        double end = j->getATT();
+        int heatsindex, heateindex;
+        for (unsigned long i=0;i<heatinterval.size();i++){
+            if(start==heatinterval[i]){
+                heatsindex=i+1;
+            }
+            if(end==heatinterval[i]){
+                heateindex=i+1;
+            }
+        }
+        //qDebug() << heatsindex << "heat s ind"<<start << j->getIsHeat();
+        //qDebug() << heateindex << "heat e ind"<<end;
+
+
+        if (j->getIsHeat()) {
+            rectangle = intervalbal->addRect(10+(pindex*30),3+(heatsindex*35),10,10,outline,redbrush);
+            line = intervalbal->addLine(15+(pindex*30),12+(heatsindex*35),15+(pindex*30),12+(heateindex*35),redpen);
+
+            //poligon for the line end arrow
+            poli << QPoint(15+(pindex*30),12+(heateindex*35));  //line end point
+            poli << QPoint(15+(pindex*30)-5,12+(heateindex*35)-5); //line end -5;-5
+            poli << QPoint(15+(pindex*30)+5,12+(heateindex*35)-5); //line end +5;-5
+            poligon = intervalbal->addPolygon(poli,redpen,redbrush);
+            poli.clear();
+
+            qDebug() << 10+(pindex*30) << " -X" << 5+(heatsindex*35) << " -Y";
+            qDebug() << 15+(pindex*30) << " -vonalend-" << 12+(heateindex*35);
+            qDebug() << 15+(pindex*30) << " -vonalstart-" << 12+(heatsindex*35);
+        } else {
+            rectangle = intervalbal->addRect(10+(pindex*30),12+(heatsindex*35),10,10,outline,bluebrush);
+            line = intervalbal->addLine(15+(pindex*30),12+(heatsindex*35),15+(pindex*30),12+(heateindex*35),bluepen);
+
+            //poligon for the line end arrow
+            poli << QPoint(15+(pindex*30),12+(heateindex*35));  //line end point
+            poli << QPoint(15+(pindex*30)-5,12+(heateindex*35)+5); //line end -5;+5
+            poli << QPoint(15+(pindex*30)+5,12+(heateindex*35)+5); //line end +5;+5
+            poligon = intervalbal->addPolygon(poli,bluepen,bluebrush);
+            poli.clear();
+
+            qDebug() << 10+(pindex*30) << " -X" << 5+(heatsindex*35) << " -Y";
+            qDebug() << 15+(pindex*30) << " -vonalend-" << 12+(heateindex*35);
+            qDebug() << 15+(pindex*30) << " -vonalstart-" << 12+(heatsindex*35);
+
+        }
+        pindex++;
+    }
+
+        //rectangle = intervalbal->addRect(-900,heatinterval[0],-20,20,20,outline,redbrush);
+    /*rectangle = intervalbal->addRect(0,heatinterval[0],10,10,outline,redbrush);
     rectangle = intervalbal->addRect(0,heatinterval[1],10,10,outline,redbrush);
     rectangle = intervalbal->addRect(0,heatinterval[2],10,10,outline,redbrush);
     rectangle = intervalbal->addRect(0,heatinterval[3],10,10,outline,redbrush);
@@ -122,6 +195,8 @@ void MainWindow::on_btn_ok_clicked()
     rectangle = intervalbal->addRect(0,heatinterval[5],10,10,outline,redbrush);
     rectangle = intervalbal->addRect(0,heatinterval[6],10,10,outline,redbrush);
     rectangle = intervalbal->addRect(0,heatinterval[7],10,10,outline,redbrush);
+*/
+    //text = intervalbal->addText()
     //line = intervalbal->addLine(0,-30,0,30,redpen);
 
     //qDebug() << heatinterval[0];
@@ -151,6 +226,7 @@ void MainWindow::on_btn_ok_clicked()
     */
 
 }
+
 
 void MainWindow::on_addFlow_clicked()
 {
@@ -182,7 +258,7 @@ void MainWindow::on_addFlow_clicked()
         flows.push_back(newflow);
 
         //calculating the highest cold and hot ID
-        for(std::list<Flow>::iterator j=flows.begin();j!=flows.end();j++){
+        for(std::vector<Flow>::iterator j=flows.begin();j!=flows.end();j++){
             if (j->getIsHeat()){
                 maxheatcnt++;
             } else {

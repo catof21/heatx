@@ -80,10 +80,11 @@ public:
         btn_ok->setGeometry(QRect(10, 230, 80, 21));
         graphicsView = new QGraphicsView(centralWidget);
         graphicsView->setObjectName(QStringLiteral("graphicsView"));
-        graphicsView->setGeometry(QRect(10, 270, 611, 251));
+        graphicsView->setGeometry(QRect(10, 270, 611, 301));
         QFont font;
         font.setPointSize(9);
         graphicsView->setFont(font);
+        graphicsView->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
         inputTable = new QTableWidget(centralWidget);
         if (inputTable->columnCount() < 6)
             inputTable->setColumnCount(6);

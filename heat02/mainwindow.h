@@ -6,6 +6,7 @@
 #include <QtGui>
 #include <flow.h>
 #include <vector>
+#include <iterator>
 #include <list>
 #include <QString>
 #include <QGraphicsScene>
@@ -23,7 +24,8 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    std::list<Flow> flows;
+    std::vector<Flow> flows;
+    //std::list<Flow> flows;
     Flow newflow;
 
     ~MainWindow();
@@ -40,6 +42,9 @@ private:
     QGraphicsEllipseItem *ellipse;
     QGraphicsRectItem *rectangle;
     QGraphicsTextItem *text;
+    QGraphicsPolygonItem *poligon;
+    QPolygon poli;
+    QGraphicsObject *object;
     QGraphicsScene *heatflow1;
     QGraphicsScene *graph;
     QGraphicsScene *design;
