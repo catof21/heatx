@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "design_grid.h"
 #include "flow.h"
 #include "vector"
 #include "QString"
@@ -18,42 +17,42 @@ MainWindow::MainWindow(QWidget *parent) :
     //for testing only
     ui->deltaT->setText("10");
 
-    newflow.setSTemp(180);
-    newflow.setTTemp(80);
-    newflow.setHCap(20);
-    newflow.setFlowName("H1");
-    newflow.setIsHeat(true);
-    newflow.setAST(ui->deltaT->text().toDouble());
-    newflow.setATT(ui->deltaT->text().toDouble());
-    flows.push_back(newflow);
+//    newflow.setSTemp(180);
+//    newflow.setTTemp(80);
+//    newflow.setHCap(20);
+//    newflow.setFlowName("H1");
+//    newflow.setIsHeat(true);
+//    newflow.setAST(ui->deltaT->text().toDouble());
+//    newflow.setATT(ui->deltaT->text().toDouble());
+//    flows.push_back(newflow);
 
-    newflow.setSTemp(130);
-    newflow.setTTemp(40);
-    newflow.setHCap(40);
-    newflow.setFlowName("H2");
-    newflow.setIsHeat(true);
-    newflow.setAST(ui->deltaT->text().toDouble());
-    newflow.setATT(ui->deltaT->text().toDouble());
-    flows.push_back(newflow);
+//    newflow.setSTemp(130);
+//    newflow.setTTemp(40);
+//    newflow.setHCap(40);
+//    newflow.setFlowName("H2");
+//    newflow.setIsHeat(true);
+//    newflow.setAST(ui->deltaT->text().toDouble());
+//    newflow.setATT(ui->deltaT->text().toDouble());
+//    flows.push_back(newflow);
 
-    newflow.setSTemp(60);
-    newflow.setTTemp(100);
-    newflow.setHCap(80);
-    newflow.setFlowName("C1");
-    newflow.setIsHeat(false);
-    newflow.setAST(ui->deltaT->text().toDouble());
-    newflow.setATT(ui->deltaT->text().toDouble());
-    flows.push_back(newflow);
+//    newflow.setSTemp(60);
+//    newflow.setTTemp(100);
+//    newflow.setHCap(80);
+//    newflow.setFlowName("C1");
+//    newflow.setIsHeat(false);
+//    newflow.setAST(ui->deltaT->text().toDouble());
+//    newflow.setATT(ui->deltaT->text().toDouble());
+//    flows.push_back(newflow);
 
-    newflow.setSTemp(30);
-    newflow.setTTemp(120);
-    newflow.setHCap(36);
-    newflow.setFlowName("C2");
-    newflow.setIsHeat(false);
-    newflow.setAST(ui->deltaT->text().toDouble());
-    newflow.setATT(ui->deltaT->text().toDouble());
-    flows.push_back(newflow);
-    //testing data end
+//    newflow.setSTemp(30);
+//    newflow.setTTemp(120);
+//    newflow.setHCap(36);
+//    newflow.setFlowName("C2");
+//    newflow.setIsHeat(false);
+//    newflow.setAST(ui->deltaT->text().toDouble());
+//    newflow.setATT(ui->deltaT->text().toDouble());
+//    flows.push_back(newflow);
+//    //testing data end
 
 
 
@@ -61,6 +60,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(intervalbal);
     hfcascade = new QGraphicsScene(this);
     ui->graphicsView_2->setScene(hfcascade);
+    graph = new QGraphicsScene(this);
+    ui->curves->setScene(graph);
+    grid = new QGraphicsScene(this);
+    ui->dgrid->setScene(grid);
 
     header = QFont("arial",13,QFont::Bold);
     small = QFont("default",10);
@@ -84,30 +87,49 @@ void MainWindow::on_btn_ok_clicked()  //calculation
     QBrush blackbrush (Qt::black);
     QBrush whitebrush (Qt::white);
     QBrush yellowbrush (Qt::yellow);
+    QBrush graybrush (Qt::gray);
     QPen outline (Qt::black);
     QPen outline2 (Qt::black);
     QPen redpen (Qt::red);
     QPen bluepen (Qt::blue);
     QPen blackpen (Qt::black);
+    QPen blackpen_s (Qt::black);
+    QPen greenpen (Qt::green);
+    QPen graypen (Qt::gray);
     outline.setWidth(2);
     outline2.setWidth(1);
     redpen.setWidth(2);
     bluepen.setWidth(2);
+    blackpen_s.setWidth(2);
 
     intervalbal->clear();
     ui->graphicsView->setScene(intervalbal);
     hfcascade->clear();
     ui->graphicsView_2->setScene(hfcascade);
+    graph->clear();
+    ui->curves->setScene(graph);
+    grid->clear();
+    ui->dgrid->setScene(grid);
 
         //heat steps
-    vector<double> heatsteps;
-    vector<double> heatinterval;
+    vector<double> heatsteps;    //with deltaTemps
+    vector<double> heatsteps_r;  //with real temps
+    vector<double> heatinterval; //with deltaTemps
+    vector<double> heatinterval_r; //with real temps
+    vector<double> heatint_hot;
+    vector<double> heatint_cold;
+    vector<double> heatstp_hot;
+    vector<double> heatstp_cold;
     vector<double> dhinterval;
     vector<double> dcp;
     vector<double> cascade;
     double cascflow,minflow,pinch;
     int pinchpoint_idx;
     for (std::vector<Flow>::iterator j=flows.begin();j!=flows.end();j++){
+        //if deltaT is changed
+        j->setAST(ui->deltaT->text().toDouble());
+        j->setATT(ui->deltaT->text().toDouble());
+
 //        ui->plainTextEdit->setPlainText(QString::number(j->getAST()));
             heatsteps.push_back(j->getAST());
 //            qDebug("AST %d ->%d",j->getAST(),i);
@@ -363,21 +385,288 @@ void MainWindow::on_btn_ok_clicked()  //calculation
     }
     //results
     pinch=heatinterval[pinchpoint_idx];
+    double pinch_h=pinch+(ui->deltaT->text().toDouble()/2);
+    double pinch_c=pinch-(ui->deltaT->text().toDouble()/2);
     ui->qhmin->setText(QString::number(minflow));
     ui->qcmin->setText(QString::number(cascade[cascade.size()-1]));
     ui->tpinch_int->setText(QString::number(pinch));
-    ui->tpinch_h->setText(QString::number(pinch+(ui->deltaT->text().toDouble()/2)));
-    ui->tpinch_c->setText(QString::number(pinch-(ui->deltaT->text().toDouble()/2)));
+    ui->tpinch_h->setText(QString::number(pinch_h));
+    ui->tpinch_c->setText(QString::number(pinch_c));
 
+    //-----------------------------------------------------------
+    //Graph for the flows
+    //get the heatinterval with real temparatures
+    //-----------------------------------------------------------
 
-    //open new window, the design grid
-    //design_grid dgrid;
-    //dgrid.setModal(true);
-    //dgrid.exec();
-    dgrid = new design_grid(this);
+    for (std::vector<Flow>::iterator j=flows.begin();j!=flows.end();j++){
+//        ui->plainTextEdit->setPlainText(QString::number(j->getAST()));
+            heatsteps_r.push_back(j->getSTemp());
+            heatsteps_r.push_back(j->getTTemp());
+            if (j->getIsHeat()) {
+                heatstp_hot.push_back(j->getSTemp());
+                heatstp_hot.push_back(j->getTTemp());
+            } else {
+                heatstp_cold.push_back(j->getSTemp());
+                heatstp_cold.push_back(j->getTTemp());
+            }
+        }
+    min=-1;
+    sort(heatsteps_r.begin(),heatsteps_r.end());
+    sort(heatstp_hot.begin(),heatstp_hot.end());
+    sort(heatstp_cold.begin(),heatstp_cold.end());
+    for(unsigned long i=0;i<heatsteps_r.size();i++) {
+        if (heatsteps_r[i]!=min){
+            heatinterval_r.push_back(heatsteps_r[i]);
+            //qDebug() <<"bekerül: " << heatsteps_r[i]<<  " min "<< min;
+            min=heatsteps_r[i];
+        }
+    }
+    min=-1;
+    for(unsigned long i=0;i<heatstp_hot.size();i++) {
+        if (heatstp_hot[i]!=min){
+            heatint_hot.push_back(heatstp_hot[i]);
+            min=heatstp_hot[i];
+        }
+    }
+    min=-1;
+    for(unsigned long i=0;i<heatstp_cold.size();i++) {
+        if (heatstp_cold[i]!=min){
+            heatint_cold.push_back(heatstp_cold[i]);
+            min=heatstp_cold[i];
+        }
+    }
+    reverse(heatinterval_r.begin(),heatinterval_r.end());
+    reverse(heatint_hot.begin(),heatint_hot.end());
+    reverse(heatint_cold.begin(),heatint_cold.end());
 
-    //dgrid->show();
+    for(unsigned long i=0;i<heatinterval_r.size();i++){
+        text = graph->addText(QString::number(heatinterval_r[i]),small);
+        text->setX(-35);
+        text->setY((-heatinterval_r[i])-10);
+        line = graph->addLine(-5,-(heatinterval_r[i]),500,-(heatinterval_r[i]),graypen);
+    }
 
+    //the graph grid with names
+    line = graph->addLine(0,0,0,-250,blackpen_s);
+    line = graph->addLine(0,0,550,0,blackpen_s);
+    //poligon for the line end arrow
+    poli << QPoint(0,-250);  //line end point
+    poli << QPoint(-5,-245); //line end -5;+5
+    poli << QPoint(5,-245); //line end +5;+5
+    poligon = graph->addPolygon(poli,blackpen_s,blackbrush);
+    poli.clear();
+
+    poli << QPoint(550,0);  //line end point
+    poli << QPoint(545,-5); //line end -5;-5
+    poli << QPoint(545, 5); //line end -5;+5
+    poligon = graph->addPolygon(poli,blackpen_s,blackbrush);
+    poli.clear();
+
+    text=graph->addText("T(°C)",header);
+    text->setX(-35);
+    text->setY(-250);
+    text=graph->addText("H(kW)",header);
+    text->setX(510);
+    text->setY(10);
+    //aspect ratio
+    double asp_h=0,asp_c=0,asp=0;
+    for(std::vector<Flow>::iterator j=flows.begin();j!=flows.end();j++){
+        if(j->getIsHeat()) {
+            asp_h=asp_h+((j->getSTemp()-j->getTTemp())*j->getHCap());
+        } else {
+            asp_c=asp_c+((j->getTTemp()-j->getSTemp())*j->getHCap());
+        }
+    }
+    if(asp_c>asp_h) {
+        asp=asp_c/500;
+    } else {
+        asp=asp_h/500;
+    }
+    //flows
+    int endp_hx=0, endp_cx=0, stp_hx=0, stp_cx=0;
+    //heat graph
+    reverse(heatint_hot.begin(),heatint_hot.end());
+    for(unsigned long i=0;i<heatint_hot.size();i++){
+        double currCP=0;
+        for (std::vector<Flow>::iterator j=flows.begin();j!=flows.end();j++){
+            if(j->getIsHeat()) {  // if heat flow
+                if (heatint_hot[i] < j->getSTemp() && heatint_hot[i] >= j->getTTemp()){
+                    currCP=currCP+j->getHCap();
+                }
+            }
+        }
+        //qDebug() << heatint_hot[i]<<" heat" << "cp "<<currCP;
+        endp_hx=(currCP * (heatint_hot[i+1]-heatint_hot[i])) + endp_hx;
+        //qDebug()<<"X " << endp_hx;
+        //qDebug()<<"Y " << heatint_hot[i+1];
+        if(currCP>0){
+            line = graph->addLine(stp_hx/asp,-heatint_hot[i],endp_hx/asp,-heatint_hot[i+1],redpen);
+            line = graph->addLine(endp_hx/asp,-5,endp_hx/asp,5,graypen);
+            text = graph->addText(QString::number(endp_hx),small);
+            text->setX((endp_hx/asp)-20);
+            text->setY(5);
+        }
+        stp_hx=endp_hx;
+    }
+    //cold graph
+    reverse(heatint_cold.begin(),heatint_cold.end());
+    for(unsigned long i=0;i<heatint_cold.size();i++){
+        double currCP=0;
+        for (std::vector<Flow>::iterator j=flows.begin();j!=flows.end();j++){
+            if(!j->getIsHeat()) {  // if heat flow
+                if (heatint_cold[i] < j->getTTemp() && heatint_cold[i] >= j->getSTemp()){
+                    currCP=currCP+j->getHCap();
+                }
+            }
+        }
+        //qDebug() << heatint_cold[i]<<" cold cp "<<currCP;
+        endp_cx=(currCP * (heatint_cold[i+1]-heatint_cold[i])) + endp_cx;
+        //qDebug()<<"X " << endp_cx;
+        //qDebug()<<"Y " << heatint_cold[i+1];
+        if(currCP>0) {
+            line = graph->addLine(stp_cx/asp,-heatint_cold[i],endp_cx/asp,-heatint_cold[i+1],bluepen);
+            line = graph->addLine(endp_cx/asp,-5,endp_cx/asp,5,graypen);
+            text = graph->addText(QString::number(endp_cx),small);
+            text->setX((endp_cx/asp)-20);
+            text->setY(18);
+        }
+        stp_cx=endp_cx;
+    }
+
+    //-----------------------------------------------------------
+    //design grid
+    //-----------------------------------------------------------
+
+     qDebug() << heatinterval_r[0] <<" "<< heatinterval_r[heatinterval_r.size()-1];
+     //draw the flows
+     for(std::vector<Flow>::iterator j=flows.begin();j!=flows.end();j++){  //fill the above and below flows
+         if(j->getTTemp()<pinch_h && j->getIsHeat()){
+             newflow.setFlowName(j->getFlowName());
+             newflow.setSTemp(j->getSTemp());
+             newflow.setTTemp(j->getTTemp());
+             newflow.setHCap(j->getHCap());
+             newflow.setIsHeat(j->getIsHeat());
+             flows_b.push_back(newflow);
+             //qDebug()<<j->getTTemp()<< "hot target"<<newflow.getFlowName();
+         }else if (j->getSTemp()<pinch_c && !j->getIsHeat()){
+             newflow.setFlowName(j->getFlowName());
+             newflow.setSTemp(j->getSTemp());
+             newflow.setTTemp(j->getTTemp());
+             newflow.setHCap(j->getHCap());
+             newflow.setIsHeat(j->getIsHeat());
+             flows_b.push_back(newflow);
+             //qDebug()<<j->getTTemp()<< "cold supply"<<newflow.getFlowName();
+         }
+         if (j->getSTemp()>=pinch_h && j->getIsHeat()){
+             newflow.setFlowName(j->getFlowName());
+             newflow.setSTemp(j->getSTemp());
+             newflow.setTTemp(j->getTTemp());
+             newflow.setHCap(j->getHCap());
+             newflow.setIsHeat(j->getIsHeat());
+             flows_a.push_back(newflow);
+             //qDebug()<<j->getTTemp()<< "hot supply above"<<newflow.getFlowName();
+         }else if (j->getTTemp()>=pinch_c && !j->getIsHeat()){
+             newflow.setFlowName(j->getFlowName());
+             newflow.setSTemp(j->getSTemp());
+             newflow.setTTemp(j->getTTemp());
+             newflow.setHCap(j->getHCap());
+             newflow.setIsHeat(j->getIsHeat());
+             flows_a.push_back(newflow);
+             //qDebug()<<j->getTTemp()<< "cold targeta above"<<newflow.getFlowName();
+         }
+     }
+     double max_cold=0,max_heat=0;
+     for(std::vector<Flow>::iterator j=flows_b.begin();j!=flows_b.end();j++){
+        if(j->getIsHeat() && j->getHCap()>=max_heat){
+            max_heat=j->getHCap();
+        }
+        if(!j->getIsHeat() && j->getHCap()>=max_cold) {
+            max_cold=j->getHCap();
+        }
+     }
+
+     int i=0;
+     asp=550/heatinterval_r[0];
+     for(std::vector<Flow>::iterator j=flows.begin();j!=flows.end();j++){
+         if(j->getIsHeat()){
+             if(j->getTTemp()<=pinch_h){
+                 rectangle = grid->addRect(j->getSTemp()*asp,i-10,20,20,redpen,redbrush);
+                 line = grid->addLine(j->getTTemp(),i,j->getSTemp()*asp,i,redpen);
+                 text = grid->addText(j->getFlowName(),header);
+                 text->setX(0);
+                 text->setY(i-10);
+                 //poligon for the line end arrow
+                 poli << QPoint(j->getTTemp(),i);  //line end point
+                 poli << QPoint(j->getTTemp()+5,i-5); //line end +5;-5
+                 poli << QPoint(j->getTTemp()+5,i+5); //line end +5;+5
+                 poligon = grid->addPolygon(poli,redpen,redbrush);
+                 poli.clear();
+                // line = grid->addLine(pinch_h*asp,i-20,pinch_h*asp,i+int(300/flows.size()/2),graypen);
+                 if(j->getHCap()==max_heat){
+                     ellipse = grid->addEllipse((pinch_h/2)*asp,i-10,20,20,graypen,graybrush);
+                 }
+                 i=i+int(300/flows.size());
+             } else {
+                 rectangle = grid->addRect(j->getSTemp()*asp,i-10,20,20,redpen,redbrush);
+                 line = grid->addLine(j->getTTemp()*asp,i,j->getSTemp()*asp,i,redpen);
+                 text = grid->addText(j->getFlowName(),header);
+                 text->setX(0);
+                 text->setY(i-10);
+                 //poligon for the line end arrow
+                 poli << QPoint(j->getTTemp()*asp,i);  //line end point
+                 poli << QPoint(j->getTTemp()*asp+5,i-5); //line end +5;-5
+                 poli << QPoint(j->getTTemp()*asp+5,i+5); //line end +5;+5
+                 poligon = grid->addPolygon(poli,redpen,redbrush);
+                 poli.clear();
+                // line = grid->addLine(pinch_h*asp,i-20,pinch_h*asp,i+int(300/flows.size()/2),graypen);
+//                 if(j->getHCap()==max_heat){
+//                     ellipse = grid->addEllipse(15*asp,i-10,20,20,graypen,graybrush);
+//                 }
+                 i=i+int(300/flows.size());
+             }
+         } else {
+             if(j->getSTemp()<pinch_c){
+                 rectangle = grid->addRect(j->getSTemp(),i-10,20,20,bluepen,bluebrush);
+                 line = grid->addLine(j->getTTemp()*asp,i,j->getSTemp(),i,bluepen);
+                 text = grid->addText(j->getFlowName(),header);
+                 text->setX(0);
+                 text->setY(i-10);
+                 //poligon for the line end arrow
+                 poli << QPoint((j->getTTemp()*asp),i);  //line end point
+                 poli << QPoint((j->getTTemp()*asp)-5,i-5); //line end -5;-5
+                 poli << QPoint((j->getTTemp()*asp)-5,i+5); //line end -5;+5
+                 poligon = grid->addPolygon(poli,bluepen,bluebrush);
+                 poli.clear();
+                 //line = grid->addLine(pinch_c*asp,i-20,pinch_c*asp,i+int(300/flows.size()/2),graypen);
+                 if(j->getHCap()==max_cold){
+                     ellipse = grid->addEllipse((pinch_c/2)*asp,i-10,20,20,graypen,graybrush);
+                 }
+                 i=i+int(300/flows.size());
+             } else {
+                 rectangle = grid->addRect((j->getSTemp()*asp)+pinch_c/2,i-10,20,20,bluepen,bluebrush);
+                 line = grid->addLine((j->getSTemp()*asp)+pinch_c/2,i,j->getTTemp()*asp,i,bluepen);
+                 text = grid->addText(j->getFlowName(),header);
+                 text->setX(0);
+                 text->setY(i-10);
+                 //poligon for the line end arrow
+                 poli << QPoint((j->getTTemp()*asp),i);  //line end point
+                 poli << QPoint((j->getTTemp()*asp)-5,i-5); //line end -5;-5
+                 poli << QPoint((j->getTTemp()*asp)-5,i+5); //line end -5;+5
+                 poligon = grid->addPolygon(poli,bluepen,bluebrush);
+                 poli.clear();
+                 //line = grid->addLine(pinch_c*asp,i-20,pinch_c*asp,i+int(300/flows.size()/2),graypen);
+//                 if(j->getHCap()==max_cold){
+//                     ellipse = grid->addEllipse(15*asp,i-10,20,20,graypen,graybrush);
+//                 }
+                 i=i+int(300/flows.size());
+             }
+
+         }
+     }
+     //draw the pinch
+     //?
+
+     //qDebug()<<max_cold<< "maxc"<<max_heat;
 
 
 }

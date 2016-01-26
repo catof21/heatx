@@ -13,7 +13,7 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 #include <QMessageBox>
-#include "design_grid.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -26,14 +26,11 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     std::vector<Flow> flows;
-    //std::list<Flow> flows;
+    std::vector<Flow> flows_b;
+    std::vector<Flow> flows_a;
     Flow newflow;
 
     ~MainWindow();
-//public slots:
-//    void recieveData(QVector);
-
-//    void sendData(QVector);
 
 private slots:
     void on_btn_ok_clicked();
@@ -44,7 +41,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    design_grid *dgrid;
     QGraphicsScene *intervalbal;
     QGraphicsScene *hfcascade;
     QGraphicsLineItem *line;
@@ -58,7 +54,7 @@ private:
     QGraphicsObject *object;
     QGraphicsScene *heatflow1;
     QGraphicsScene *graph;
-    QGraphicsScene *design;
+    QGraphicsScene *grid;
 
 };
 
